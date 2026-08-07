@@ -7,7 +7,7 @@ module "database" {
   database_name = var.database_name
 }
 
-module "database" {
+module "test_database" {
   source = "./modules/database"
 
   database_name = var.database_testdb_name
