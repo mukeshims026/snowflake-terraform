@@ -17,6 +17,9 @@ variable "role" {
 variable "database_name" {
   default = "HR"
 }
+variable "database_testdb_name" {
+  default = "TESTDB"
+}
 
 variable "schemas" {
   default = ["BRONZE", "SILVER", "GOLD"]
