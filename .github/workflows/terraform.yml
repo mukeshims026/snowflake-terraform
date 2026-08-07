@@ -90,9 +90,9 @@ jobs:
             echo "TF_VAR_snowflake_region=${{ secrets.SF_REGION_QA }}"          >> $GITHUB_ENV
             echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID_QA }}"        >> $GITHUB_ENV
             echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY_QA }}" >> $GITHUB_ENV
-            echo "TF_STATE_BUCKET=terraform-state-mukesh"                        >> $GITHUB_ENV
+            echo "TF_STATE_BUCKET=terraform-state-mukesh-qa"                        >> $GITHUB_ENV
             echo "TF_STATE_KEY=snowflake/terraform.tfstate"                     >> $GITHUB_ENV
-            echo "TF_LOCK_TABLE=terraform-state-mukesh"                         >> $GITHUB_ENV
+            echo "TF_LOCK_TABLE=terraform-state-mukesh_qa"                         >> $GITHUB_ENV
             echo "TF_REGION=ap-southeast-2"                                     >> $GITHUB_ENV
           else
             echo "TF_VAR_snowflake_account=${{ secrets.SF_ACCOUNT_DEV }}"       >> $GITHUB_ENV
