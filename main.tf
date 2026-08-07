@@ -7,7 +7,6 @@ module "database" {
   database_name = var.database_name
 }
 
-
 #################################
 # WAREHOUSE
 #################################
@@ -104,7 +103,7 @@ module "department_table" {
 
   database_name = module.database.database_name
   # schema_name   = snowflake_schema.bronze.name
-  schema_name   = var.schemas[0] # Using the first schema (BRONZE) for table
+  schema_name = var.schemas[0] # Using the first schema (BRONZE) for table
 
   table_name = var.dept_table
 
