@@ -8,7 +8,12 @@
 
 name: Snowflake Terraform Deploy
 
+
 on:
+  # push:
+  #   branches: [ "main" , "dev" ]
+  # pull_request:
+  # workflow_dispatch:
   push:
     branches:
       - dev    # ← triggers DEV deployment
