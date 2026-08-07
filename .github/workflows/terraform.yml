@@ -102,10 +102,10 @@ jobs:
             echo "TF_VAR_snowflake_region=${{ secrets.SF_REGION_DEV }}"         >> $GITHUB_ENV
             echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID_DEV }}"       >> $GITHUB_ENV
             echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}" >> $GITHUB_ENV
-            echo "TF_STATE_BUCKET=tf-state-snowflake-dev"                       >> $GITHUB_ENV
+            echo "TF_STATE_BUCKET=terraform-state-mukesh"                       >> $GITHUB_ENV
             echo "TF_STATE_KEY=snowflake/terraform.tfstate"                     >> $GITHUB_ENV
-            echo "TF_LOCK_TABLE=tf-lock-dev"                                    >> $GITHUB_ENV
-            echo "TF_REGION=us-east-1"                                          >> $GITHUB_ENV
+            echo "TF_LOCK_TABLE=terraform-state-mukesh"                                    >> $GITHUB_ENV
+            echo "TF_REGION=ap-southeast-2"                                          >> $GITHUB_ENV
           fi
 
       # ── 4. Terraform Init (with environment-specific S3 backend) ──────────
