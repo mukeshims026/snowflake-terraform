@@ -6,6 +6,7 @@ module "hr_database" {
   database_name = var.database_name
 }
 
+
 module "test_database" {
   source        = "./modules/database"
   database_name = var.database_report_name
