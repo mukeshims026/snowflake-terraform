@@ -7,12 +7,14 @@ terraform {
   }
 
   backend "s3" {
-    bucket = "terraform-state-mukesh"
-    key    = "terraform.tfstate"
-    region = "ap-southeast-2"
+    bucket         = "terraform-state-mukesh"
+    key            = "snowflake/terraform.tfstate"
+    region         = "ap-southeast-2"
     dynamodb_table = "terraform-state-mukesh"
-    encrypt = true
-    role_arn = "arn:aws:iam::799722407171:role/SnowflakeAccess"
+    encrypt        = true
+    assume_role {
+      role_arn = "arn:aws:iam::799722407171:role/SnowflakeAccess"
+    }
   }
 }
 
