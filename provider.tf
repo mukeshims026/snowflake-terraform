@@ -12,7 +12,7 @@ terraform {
     region         = "ap-southeast-2"
     dynamodb_table = "terraform-state-mukesh"
     encrypt        = true
-    assume_role {
+    assume_role = {
       role_arn = "arn:aws:iam::799722407171:role/SnowflakeAccess"
     }
   }

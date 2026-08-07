@@ -15,10 +15,10 @@ variable "role" {
 }
 
 variable "database_name" {
-  default = "HR"
+  default = "HRDB"
 }
-variable "database_testdb_name" {
-  default = "TESTDB"
+variable "database_report_name" {
+  default = "HRREPORTDB"
 }
 
 variable "schemas" {
