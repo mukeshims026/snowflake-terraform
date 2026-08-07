@@ -10,7 +10,7 @@ module "hr_database" {
 module "test_database" {
   source = "./modules/database"
 
-  database_name = var.database_salesdb_name
+  database_name = var.database_report_name
 }
 
 
