@@ -7,6 +7,7 @@ module "database" {
   database_name = var.database_name
 }
 
+
 #################################
 # WAREHOUSE
 #################################
