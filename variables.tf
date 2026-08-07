@@ -17,8 +17,8 @@ variable "role" {
 variable "database_name" {
   default = "HRDB"
 }
-variable "database_salesdb_name" {
-  default = "SALESDB"
+variable "database_report_name" {
+  default = "HRREPORTDB"
 }
 
 variable "schemas" {
