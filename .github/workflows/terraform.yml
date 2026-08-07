@@ -134,31 +134,31 @@ jobs:
             -input=false
 
       # ── 6b. Auto‑Import Existing Snowflake Objects ───────────────────────
-      - name: Terraform Auto‑Import Snowflake Objects
-        if: github.event_name == 'push'
-        working-directory: ${{ env.TF_WORKING_DIR }}
-        run: |
-          # Install snowsql if not already available
-          sudo apt-get update && sudo apt-get install -y snowflake-cli || true
+      # - name: Terraform Auto‑Import Snowflake Objects
+      #   if: github.event_name == 'push'
+      #   working-directory: ${{ env.TF_WORKING_DIR }}
+      #   run: |
+      #     # Install snowsql if not already available
+      #     sudo apt-get update && sudo apt-get install -y snowflake-cli || true
 
-          # Configure snowsql connection (using TF_VAR_* env vars)
-          snowsql -a $TF_VAR_snowflake_account -u $TF_VAR_username -r $TF_VAR_role -w EMP_WH -d HR -q "SELECT CURRENT_DATE;" || true
+      #     # Configure snowsql connection (using TF_VAR_* env vars)
+      #     snowsql -a $TF_VAR_snowflake_account -u $TF_VAR_username -r $TF_VAR_role -w EMP_WH -d HR -q "SELECT CURRENT_DATE;" || true
 
-          # Import databases defined in Terraform if they already exist
-          for db in $(grep -Po '(?<=resource "snowflake_database" ")[^"]+' modules/database/*.tf); do
-            if snowsql -q "SHOW DATABASES LIKE '$db';" | grep -q "$db"; then
-              echo "Importing existing database: $db"
-              terraform import "module.database.snowflake_database.db" "$db" || true
-            fi
-          done
+      #     # Import databases defined in Terraform if they already exist
+      #     for db in $(grep -Po '(?<=resource "snowflake_database" ")[^"]+' modules/database/*.tf); do
+      #       if snowsql -q "SHOW DATABASES LIKE '$db';" | grep -q "$db"; then
+      #         echo "Importing existing database: $db"
+      #         terraform import "module.database.snowflake_database.db" "$db" || true
+      #       fi
+      #     done
 
-          # Import warehouses defined in Terraform if they already exist
-          for wh in $(grep -Po '(?<=resource "snowflake_warehouse" ")[^"]+' modules/warehouse/*.tf); do
-            if snowsql -q "SHOW WAREHOUSES LIKE '$wh';" | grep -q "$wh"; then
-              echo "Importing existing warehouse: $wh"
-              terraform import "module.warehouse.snowflake_warehouse.warehouse" "$wh" || true
-            fi
-          done
+      #     # Import warehouses defined in Terraform if they already exist
+      #     for wh in $(grep -Po '(?<=resource "snowflake_warehouse" ")[^"]+' modules/warehouse/*.tf); do
+      #       if snowsql -q "SHOW WAREHOUSES LIKE '$wh';" | grep -q "$wh"; then
+      #         echo "Importing existing warehouse: $wh"
+      #         terraform import "module.warehouse.snowflake_warehouse.warehouse" "$wh" || true
+      #       fi
+      #     done
 
       # ── 7. Terraform Apply (only on push, not on pull_request) ────────────
       - name: Terraform Apply
