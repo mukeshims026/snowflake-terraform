@@ -1,7 +1,7 @@
 #################################
 # DATABASE
 #################################
-module "database" {
+module "hr_database" {
   source = "./modules/database"
 
   database_name = var.database_name
@@ -10,7 +10,7 @@ module "database" {
 module "test_database" {
   source = "./modules/database"
 
-  database_name = var.database_testdb_name
+  database_name = var.database_salesdb_name
 }
 
 
@@ -31,7 +31,7 @@ module "warehouse" {
 module "schemas" {
   source = "./modules/schema"
 
-  database_name = module.database.database_name
+  database_name = module.hr_database.database_name
 
   schemas = var.schemas
 }
@@ -43,7 +43,7 @@ module "schemas" {
 module "employee_table" {
   source = "./modules/table"
 
-  database_name = module.database.database_name
+  database_name = module.hr_database.database_name
   schema_name   = var.schemas[0] # Using the first schema (BRONZE) for table
   # schema_name   = snowflake_schema.bronze.name
   # depends_on = [snowflake_schema.bronze]
@@ -66,7 +66,7 @@ module "employee_table" {
 module "country_table" {
   source = "./modules/table"
 
-  database_name = module.database.database_name
+  database_name = module.hr_database.database_name
   schema_name   = var.schemas[0] # Using the first schema (BRONZE) for table
   # schema_name   = snowflake_schema.bronze.name
   # depends_on = [snowflake_schema.bronze]
@@ -87,7 +87,7 @@ module "country_table" {
 module "gender_table" {
   source = "./modules/table"
 
-  database_name = module.database.database_name
+  database_name = module.hr_database.database_name
   schema_name   = var.schemas[0] # Using the first schema (BRONZE) for table
   # schema_name   = snowflake_schema.bronze.name
   # depends_on = [snowflake_schema.bronze]
@@ -108,7 +108,7 @@ module "gender_table" {
 module "department_table" {
   source = "./modules/table"
 
-  database_name = module.database.database_name
+  database_name = module.hr_database.database_name
   # schema_name   = snowflake_schema.bronze.name
   schema_name = var.schemas[0] # Using the first schema (BRONZE) for table
 
@@ -129,7 +129,7 @@ module "department_table" {
 module "emp_silver_table" {
   source = "./modules/table"
 
-  database_name = module.database.database_name
+  database_name = module.hr_database.database_name
   schema_name   = var.schemas[1] # Using the schema (SILVER) for table
   # schema_name   = snowflake_schema.silver.name
   table_name = var.emp_silver_table
@@ -150,7 +150,7 @@ module "emp_silver_table" {
 module "file_format" {
   source = "./modules/file_format"
 
-  database_name = module.database.database_name
+  database_name = module.hr_database.database_name
   schema_name   = var.schemas[0] # Using the first schema (BRONZE) for file format
   name          = "CSV_FORMAT"
 }
@@ -161,7 +161,7 @@ module "file_format" {
 module "stage" {
   source = "./modules/stage"
 
-  database_name = module.database.database_name
+  database_name = module.hr_database.database_name
   schema_name   = var.schemas[0] # Using the first schema (BRONZE) for stage
 
   stage_name = "BRONZE_STAGE"
@@ -173,15 +173,15 @@ module "stage" {
 # PIPE
 #################################
 locals {
-  emp_table    = "${module.database.database_name}.${var.schemas[0]}.${module.employee_table.table_name}"
-  bronze_stage = "@${module.database.database_name}.${var.schemas[0]}.${module.stage.stage_name}"
-  csvformat    = "${module.database.database_name}.${var.schemas[0]}.${module.file_format.format_name}"
+  emp_table    = "${module.hr_database.database_name}.${var.schemas[0]}.${module.employee_table.table_name}"
+  bronze_stage = "@${module.hr_database.database_name}.${var.schemas[0]}.${module.stage.stage_name}"
+  csvformat    = "${module.hr_database.database_name}.${var.schemas[0]}.${module.file_format.format_name}"
 }
 
 module "pipe" {
   source = "./modules/pipe"
 
-  database_name = module.database.database_name
+  database_name = module.hr_database.database_name
   schema_name   = var.schemas[0]
 
   pipe_name   = "EMP_PIPE"
@@ -201,13 +201,13 @@ EOT
 #################################
 
 locals {
-  emp_silver_table = "${module.database.database_name}.${var.schemas[1]}.${module.emp_silver_table.table_name}"
+  emp_silver_table = "${module.hr_database.database_name}.${var.schemas[1]}.${module.emp_silver_table.table_name}"
 }
 
 module "task" {
   source = "./modules/task"
 
-  database_name = module.database.database_name
+  database_name = module.hr_database.database_name
   schema_name   = var.schemas[1] # Using the second schema (SILVER) for task
 
   task_name      = "BRONZE_TO_SILVER_TASK"
@@ -226,7 +226,7 @@ EOT
 module "stream" {
   source = "./modules/stream"
 
-  database_name = module.database.database_name
+  database_name = module.hr_database.database_name
   schema_name   = var.schemas[0] # Using the first schema (BRONZE) for stream
 
   stream_name = "EMP_STREAM"
