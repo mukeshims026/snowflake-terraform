@@ -9,10 +9,10 @@ terraform {
   backend "s3" {
     bucket = "terraform-state-mukesh"
     key    = "terraform.tfstate"
-    region = "us-east-1"
+    region = "ap-southeast-2"
     dynamodb_table = "terraform-state-mukesh"
     encrypt = true
-    role_arn = "arn:aws:iam::123456789012:role/terraform-state-mukesh"
+    role_arn = "arn:aws:iam::799722407171:role/SnowflakeAccess"
   }
 }
 
