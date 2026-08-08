@@ -16,7 +16,7 @@ module "test_database" {
 # WAREHOUSE
 #################################
 module "warehouse" {
-  source        = "./modules/warehouse"
+  source         = "./modules/warehouse"
   warehouse_name = "EMP_WH"
   size           = "XSMALL"
   auto_suspend   = 60
@@ -110,6 +110,33 @@ module "department_table" {
 }
 
 #################################
+# TABLE (BRONZE.COUNTRY)
+#################################
+module "order_raw_table" {
+  source        = "./modules/table"
+  database_name = module.hr_database.database_name
+  schema_name   = var.schemas[0]
+  table_name    = "ORDER_RAW"
+
+  columns = [
+    { name = "ORDERID", type = "NUMBER" },
+    { name = "orderdate", type = "STRING" },
+    { name = "CUSTOMERID", type = "STRING" },
+    { name = "CUSTOMERNAME", type = "STRING" },
+    { name = "ITEMID", type = "STRING" },
+
+    { name = "ITEMNAME", type = "STRING" },
+    { name = "QUANTITY", type = "STRING" },
+    { name = "RATE", type = "STRING" },
+    { name = "ADDRESS", type = "STRING" },
+    { name = "CITY", type = "STRING" },
+    { name = "COUNTRY", type = "STRING" },
+  ]
+
+  depends_on = [module.schemas]
+}
+
+#################################
 # TABLE (SILVER.EMPLOYEES)
 #################################
 module "emp_silver_table" {
@@ -181,6 +208,29 @@ EOT
   depends_on = [module.stage, module.employee_table, module.file_format]
 }
 
+locals {
+  ORDER_RAW = "${module.hr_database.database_name}.${var.schemas[0]}.${module.order_raw_table.table_name}"
+}
+
+module "ORDER_RAW_PIPE" {
+  source        = "./modules/pipe"
+  database_name = module.hr_database.database_name
+  schema_name   = var.schemas[0]
+
+  pipe_name   = "ORDER_RAW_PIPE"
+  stage_name  = module.stage.stage_name
+  table_name  = module.employee_table.table_name
+  file_format = module.file_format.format_name
+
+  copy_statement = <<EOT
+    COPY INTO ${local.ORDER_RAW}
+    FROM ${local.bronze_stage}
+    FILE_FORMAT = (FORMAT_NAME = ${local.csvformat})
+EOT
+
+  depends_on = [module.stage, module.employee_table, module.file_format]
+}
+
 #################################
 # TASK (BRONZE → SILVER)
 #################################
@@ -203,6 +253,25 @@ module "task" {
 EOT
 
   depends_on = [module.employee_table, module.emp_silver_table, module.warehouse]
+}
+
+locals {
+  l_ORDER_RAW_PIPE = "${module.hr_database.database_name}.${var.schemas[0]}.${module.ORDER_RAW_PIPE.pipe_name}"
+}
+
+module "TASK_LOAD_RAW_ORDER" {
+  source        = "./modules/task"
+  database_name = module.hr_database.database_name
+  schema_name   = var.schemas[1]
+
+  task_name      = "TASK_LOAD_RAW_ORDER"
+  warehouse_name = module.warehouse.warehouse_name
+
+  sql_statement = <<EOT
+    alter pipe ${local.l_ORDER_RAW_PIPE} refresh
+EOT
+
+  depends_on = [module.order_raw_table, module.warehouse, module.ORDER_RAW_PIPE]
 }
 
 #################################
