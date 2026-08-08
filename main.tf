@@ -120,7 +120,7 @@ module "order_raw_table" {
 
   columns = [
     { name = "ORDERID", type = "NUMBER" },
-    { name = "orderdate", type = "STRING" },
+    { name = "ORDERDATE", type = "STRING" },
     { name = "CUSTOMERID", type = "STRING" },
     { name = "CUSTOMERNAME", type = "STRING" },
     { name = "ITEMID", type = "STRING" },
