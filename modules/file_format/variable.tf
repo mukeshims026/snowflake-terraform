@@ -9,3 +9,7 @@ variable "schema_name" {
 variable "name" {
   type = string
 }
+
+variable "parse_header" {
+  type = bool
+}

@@ -6,4 +6,5 @@ resource "snowflake_file_format" "format" {
   format_type     = "CSV"
   field_delimiter = ","
   skip_header     = 1
+  parse_header = var.parse_header
 }

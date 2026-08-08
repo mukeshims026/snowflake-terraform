@@ -164,6 +164,7 @@ module "file_format" {
   database_name = module.hr_database.database_name
   schema_name   = var.schemas[0]
   name          = "CSV_FORMAT"
+  parse_header  = TRUE
 
   depends_on = [module.schemas]
 }
@@ -202,7 +203,8 @@ module "pipe" {
   copy_statement = <<EOT
     COPY INTO ${local.emp_table}
     FROM ${local.bronze_stage}
-    FILE_FORMAT = (FORMAT_NAME = ${local.csvformat})
+    FILE_FORMAT = (FORMAT_NAME = ${local.csvformat}
+    MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE)
 EOT
 
   depends_on = [module.stage, module.employee_table, module.file_format]
