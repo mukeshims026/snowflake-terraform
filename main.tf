@@ -203,8 +203,8 @@ module "pipe" {
   copy_statement = <<EOT
     COPY INTO ${local.emp_table}
     FROM ${local.bronze_stage}
-    FILE_FORMAT = (FORMAT_NAME = ${local.csvformat}
-    MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE)
+    FILE_FORMAT = (FORMAT_NAME = ${local.csvformat})
+    MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE
 EOT
 
   depends_on = [module.stage, module.employee_table, module.file_format]
