@@ -262,7 +262,7 @@ locals {
 module "TASK_LOAD_RAW_ORDER" {
   source        = "./modules/task"
   database_name = module.hr_database.database_name
-  schema_name   = var.schemas[1]
+  schema_name   = var.schemas[0]
 
   task_name      = "TASK_LOAD_RAW_ORDER"
   warehouse_name = module.warehouse.warehouse_name
