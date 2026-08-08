@@ -164,7 +164,7 @@ module "file_format" {
   database_name = module.hr_database.database_name
   schema_name   = var.schemas[0]
   name          = "CSV_FORMAT"
-  parse_header  = TRUE
+  parse_header  = true
 
   depends_on = [module.schemas]
 }
