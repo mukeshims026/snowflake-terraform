@@ -228,6 +228,7 @@ module "ORDER_RAW_PIPE" {
     COPY INTO ${local.ORDER_RAW}
     FROM ${local.bronze_stage}
     FILE_FORMAT = (FORMAT_NAME = ${local.csvformat})
+    MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE
 EOT
 
   depends_on = [module.stage, module.employee_table, module.file_format]
