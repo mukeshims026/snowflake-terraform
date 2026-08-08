@@ -53,24 +53,24 @@ module "employee_table" {
   depends_on = [module.schemas]
 }
 
-#################################
-# TABLE (BRONZE.COUNTRY)
-#################################
-module "country_table" {
-  source        = "./modules/table"
-  database_name = module.hr_database.database_name
-  schema_name   = var.schemas[0]
-  table_name    = "COUNTRY"
+# #################################
+# # TABLE (BRONZE.COUNTRY)
+# #################################
+# module "country_table" {
+#   source        = "./modules/table"
+#   database_name = module.hr_database.database_name
+#   schema_name   = var.schemas[0]
+#   table_name    = "COUNTRY"
 
-  columns = [
-    { name = "country_id", type = "NUMBER" },
-    { name = "name", type = "STRING" },
-    { name = "std", type = "STRING" },
-    { name = "capital", type = "STRING" }
-  ]
+#   columns = [
+#     { name = "country_id", type = "NUMBER" },
+#     { name = "name", type = "STRING" },
+#     { name = "std", type = "STRING" },
+#     { name = "capital", type = "STRING" }
+#   ]
 
-  depends_on = [module.schemas]
-}
+#   depends_on = [module.schemas]
+# }
 
 #################################
 # TABLE (BRONZE.GENDER)
